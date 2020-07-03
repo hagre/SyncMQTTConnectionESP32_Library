@@ -1,13 +1,13 @@
 # SyncMQTTConnectionESP32_Library
 
-Arduino Library for very simple and basic MQTT connection, SYNCHRONOUS, arduino-esp32
+Arduino Library for very simple and basic MQTT connection, SYNCHRONOUS, arduino-esp32, based on PubSubClient
 
 require #include "PubSubClient.h" library https://github.com/knolleary/pubsubclient.git PlatforIO ID_89
 
-require #include "verysimpletimer.h">"  https://github.com/hagre/VerySimpleTimer_Library.git
+require #include "verysimpletimer.h"  https://github.com/hagre/VerySimpleTimer_Library.git
 
 
-Connection to MQTT broker 
+# Connection to MQTT broker  STATUS:
 
  -5 MQTT init status, 
  -3 LAN just disconnected, disconnect MQTT ans set all buffers to unsubscribe
@@ -20,7 +20,7 @@ Connection to MQTT broker
  4 subscribed and connected, re-check update required for subscription or unsubscription (according buffer)
 
 
-public Methods:
+# public Methods:
 
     SyncMQTTConnectionESP32();
 
