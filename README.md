@@ -10,13 +10,21 @@ require #include "verysimpletimer.h"  https://github.com/hagre/VerySimpleTimer_L
 # Connection to MQTT broker  STATUS:
 
  -5 MQTT init status, 
+ 
  -3 LAN just disconnected, disconnect MQTT ans set all buffers to unsubscribe
+ 
  -2 MQTT just disconnected,
+ 
  -1 wait to reconnect MQTT, 
+ 
  0 disconnected, start connection with or without Password afer waiting periode
+ 
  1 connecting, 
+ 
  2 just connected, 
+ 
  3 subscribing, all preselected topics (according buffer)
+ 
  4 subscribed and connected, re-check update required for subscription or unsubscription (according buffer)
 
 
