@@ -244,10 +244,18 @@ bool SyncMQTTConnectionESP32::manageSubscriptions (bool justSubscribe = false){
 }
 
 
-bool SyncMQTTConnectionESP32::publish(const char* topic, const uint8_t *payload, unsigned int plength, bool retained){
+bool SyncMQTTConnectionESP32::publish(const char* topic, const uint8_t *payload, unsigned int plength, bool retain){
 
-    return _mqttPubSubClient.publish(topic, payload, plength, retained);
+    return _mqttPubSubClient.publish(topic, payload, plength, retain);
 }
+
+/*
+not supported by PubSubCLient
+bool SyncMQTTConnectionESP32::publish(const char* topic, const uint8_t *payload, unsigned int plength, uint8_t qOS, bool retain){
+
+    return _mqttPubSubClient.publish(topic, payload, plength, qOS, retain);
+}
+*/
 
 int8_t SyncMQTTConnectionESP32::loop (uint32_t millistime, uint8_t lANStatus){
 

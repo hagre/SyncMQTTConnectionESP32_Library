@@ -105,7 +105,8 @@ public:
     bool addSubscriptionToTable (uint8_t num, byte* topic , uint16_t topicLength);
     bool deleteSubscriptioFromTable (uint8_t num);
     
-    bool publish (const char* topic, const uint8_t * payload, unsigned int plength, bool retained);
+    bool publish (const char* topic, const uint8_t * payload, unsigned int plength, bool retain);
+    // bool publish (const char* topic, const uint8_t * payload, unsigned int plength, uint8_t qOS, bool retain); //not supported by PubSubCLient
     int8_t loop (uint32_t millistime, uint8_t lANStatus);
 };
 
