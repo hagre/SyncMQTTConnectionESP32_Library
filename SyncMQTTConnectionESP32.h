@@ -21,33 +21,33 @@ by hagre 2020
 #include "verysimpletimer.h" 
 
 #ifndef MQTT_WAIT_FOR_SERVER_CONNECTION
-    #define MQTT_WAIT_FOR_SERVER_CONNECTION 30000 //ms time
+#define MQTT_WAIT_FOR_SERVER_CONNECTION 30000 //ms time
 #endif
 #ifndef MQTT_WAIT_FOR_SERVER_RECONNECTION
-    #define MQTT_WAIT_FOR_SERVER_RECONNECTION 15000 //ms time
+#define MQTT_WAIT_FOR_SERVER_RECONNECTION 15000 //ms time
 #endif
 
 //switch ASAP off
-//#define DEBUG_MQTT_ENABLED 
+#define DEBUG_MQTT_ENABLED 
 
 #ifdef DEBUG_MQTT_ENABLED
-    #define DEBUG_MQTT_BOUD 230400 //config as required
+#define DEBUG_MQTT_BOUD 230400 //config as required
 #endif
 
 #ifndef MAX_NUM_OFF_MQTT_SUBSCRIPTION
-    #define MAX_NUM_OFF_MQTT_SUBSCRIPTION 10 //config as required
+#define MAX_NUM_OFF_MQTT_SUBSCRIPTION 10 //config as required
 #endif
 
 #ifndef MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH
-    #define MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH 50 //config as required
+#define MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH 50 //config as required
 #endif
 
 
 #if defined(ESP8266) || defined(ESP32)
-    #include <functional>
-    #define MY_MQTT_CALLBACK_SIGNATURE std::function<void(char*, uint8_t*, unsigned int)> mycallback
+#include <functional>
+#define MY_MQTT_CALLBACK_SIGNATURE std::function<void(char*, uint8_t*, unsigned int)> mycallback
 #else
-    #define MY_MQTT_CALLBACK_SIGNATURE void (*mycallback)(char*, uint8_t*, unsigned int)
+#define MY_MQTT_CALLBACK_SIGNATURE void (*mycallback)(char*, uint8_t*, unsigned int)
 #endif
 
 
@@ -62,13 +62,13 @@ private:
         bool toSubscribe = false;
         bool toUnsubscribe = false;
         bool subscribed = false;
-        char topic [MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH];
+        char topic[MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH];
         uint16_t topicLength;
-    } _subscriptionBuffer [MAX_NUM_OFF_MQTT_SUBSCRIPTION];
+    } _subscriptionBuffer[MAX_NUM_OFF_MQTT_SUBSCRIPTION];
 
-    const char *_mqttPubSubClientId;
-    const char *_mqttUsername;
-    const char *_mqttPassword;
+    const char* _mqttPubSubClientId;
+    const char* _mqttUsername;
+    const char* _mqttPassword;
     bool _cleanSessionClient;
     bool _withPW;
     bool _withLastWill;
@@ -81,33 +81,34 @@ private:
     VerySimpleTimer _MQTTWaitForConnectionTimer;
     VerySimpleTimer _MQTTWaitForReconnectionTimer;
 
-    PubSubClient _mqttPubSubClient;  
+    PubSubClient _mqttPubSubClient;
 
-    void setUnsubscribed (uint8_t num);
-    void setAllUnsubscribed ();
+    void setUnsubscribed(uint8_t num);
+    void setAllUnsubscribed();
 
-    bool checkSubscriptionActive (uint8_t num);
-    bool manageSubscriptions (bool justSubscribe);
+    bool checkSubscriptionActive(uint8_t num);
+    bool manageSubscriptions(bool justSubscribe);
 
 public:
     SyncMQTTConnectionESP32();
 
-    void setMQTTConnection (const char *mqttPubSubClientId, const char *mqttUsername, const char *mqttPassword,  bool cleanSessionClient, Client& mqttLANClient, IPAddress ip, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout );
-    void setMQTTConnection (const char *mqttPubSubClientId, const char *mqttUsername, const char *mqttPassword,  bool cleanSessionClient, Client& mqttLANClient, const char* domain, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout );
-    void setMQTTConnection (const char *mqttPubSubClientId, bool cleanSessionClient, Client& mqttLANClient, IPAddress ip, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout );
-    void setMQTTConnection (const char *mqttPubSubClientId, bool cleanSessionClient, Client& mqttLANClient, const char* domain, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout );
-    void setMQTTCallback (MY_MQTT_CALLBACK_SIGNATURE);
+    void setMQTTConnection(const char* mqttPubSubClientId, const char* mqttUsername, const char* mqttPassword, bool cleanSessionClient, Client& mqttLANClient, IPAddress ip, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout);
+    void setMQTTConnection(const char* mqttPubSubClientId, const char* mqttUsername, const char* mqttPassword, bool cleanSessionClient, Client& mqttLANClient, const char* domain, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout);
+    void setMQTTConnection(const char* mqttPubSubClientId, bool cleanSessionClient, Client& mqttLANClient, IPAddress ip, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout);
+    void setMQTTConnection(const char* mqttPubSubClientId, bool cleanSessionClient, Client& mqttLANClient, const char* domain, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout);
+    void setMQTTCallback(MY_MQTT_CALLBACK_SIGNATURE);
 
-    void setMQTTLastWill (const char* mQTTLastWillTopic, uint8_t mQTTLastWillQos, bool mQTTLastWillRetain, const char* mQTTLastWillMessage);
-    void deleteMQTTLastWill ();
-    
-    bool checkSubscriptionUsed (uint8_t num);
-    bool addSubscriptionToTable (uint8_t num, byte* topic , uint16_t topicLength);
-    bool deleteSubscriptioFromTable (uint8_t num);
-    
-    bool publish (const char* topic, const uint8_t * payload, unsigned int plength, bool retain);
+    void setMQTTLastWill(const char* mQTTLastWillTopic, uint8_t mQTTLastWillQos, bool mQTTLastWillRetain, const char* mQTTLastWillMessage);
+    void deleteMQTTLastWill();
+
+    bool checkSubscriptionUsed(uint8_t num);
+    bool addSubscriptionToTable(uint8_t num, byte* topic, uint16_t topicLength);
+    bool deleteSubscriptioFromTable(uint8_t num);
+    String getTopicFromBuffer(uint8_t num);
+
+    bool publish(const char* topic, const uint8_t* payload, unsigned int plength, bool retain);
     // bool publish (const char* topic, const uint8_t * payload, unsigned int plength, uint8_t qOS, bool retain); //not supported by PubSubCLient
-    int8_t loop (uint32_t millistime, uint8_t lANStatus);
+    int8_t loop(uint32_t millistime, uint8_t lANStatus);
 };
 
 #endif
