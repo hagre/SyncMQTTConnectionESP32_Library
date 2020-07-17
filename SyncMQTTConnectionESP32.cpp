@@ -190,7 +190,7 @@ char* SyncMQTTConnectionESP32::getTopicFromBuffer(uint8_t num) {
 
     char* output;
     output = _subscriptionBuffer[num].topic;
-    return outputString;
+    return output;
 }
 
 void SyncMQTTConnectionESP32::setUnsubscribed(uint8_t num) {
