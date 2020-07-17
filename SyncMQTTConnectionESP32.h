@@ -104,7 +104,7 @@ public:
     bool checkSubscriptionUsed(uint8_t num);
     bool addSubscriptionToTable(uint8_t num, byte* topic, uint16_t topicLength);
     bool deleteSubscriptioFromTable(uint8_t num);
-    String getTopicFromBuffer(uint8_t num);
+    char* getTopicFromBuffer(uint8_t num);
 
     bool publish(const char* topic, const uint8_t* payload, unsigned int plength, bool retain);
     // bool publish (const char* topic, const uint8_t * payload, unsigned int plength, uint8_t qOS, bool retain); //not supported by PubSubCLient

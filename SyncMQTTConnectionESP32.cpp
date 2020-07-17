@@ -186,12 +186,10 @@ bool SyncMQTTConnectionESP32::deleteSubscriptioFromTable(uint8_t num) {
     return false;
 }
 
-String SyncMQTTConnectionESP32::getTopicFromBuffer(uint8_t num) {
+char* SyncMQTTConnectionESP32::getTopicFromBuffer(uint8_t num) {
 
-    String outputString = "";
-    for (uint16_t i = 0; i < _subscriptionBuffer[num].topicLength; i++) {
-        outputString = outputString + _subscriptionBuffer[num].topic[i];
-    }
+    char* output;
+    output = _subscriptionBuffer[num].topic;
     return outputString;
 }
 
