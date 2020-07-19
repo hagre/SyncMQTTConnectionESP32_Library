@@ -345,7 +345,6 @@ int8_t SyncMQTTConnectionESP32::loop(uint32_t millistime, uint8_t lANStatus) {
         else if (_MQTTStatus == 1) {
             if (_mqttPubSubClient.connected()) {
                 _MQTTStatus = 2; //MQTT just connected
-                //boot/new connect = true; ----------------------------------------------------------------------------------------------------BOOT MSG BUFFER ----------------------------------------------------------------------------------
                 #ifdef DEBUG_MQTT_ENABLED 
                     Serial.println(" MQTT just connected");
                 #endif
@@ -356,22 +355,18 @@ int8_t SyncMQTTConnectionESP32::loop(uint32_t millistime, uint8_t lANStatus) {
         }
         else if (_MQTTStatus == 2) { //MQTT just connected
             _MQTTStatus = 3; //subscribing
-            bool checkstatus = _mqttPubSubClient.loop();
             if (!_mqttPubSubClient.loop()) {
                 _MQTTStatus = -2; // MQTT just disconnected
                 #ifdef DEBUG_MQTT_ENABLED 
                     Serial.print(" MQTT connecting problem in Loop ");
-                    Serial.println(checkstatus);
                 #endif
             }
         }
         else if (_MQTTStatus == 3) { //subscribing
-            bool checkstatus = _mqttPubSubClient.loop();
-            if (!checkstatus) {
+            if (!_mqttPubSubClient.loop()) {
                 _MQTTStatus = -2; // MQTT just disconnected
                 #ifdef DEBUG_MQTT_ENABLED 
                     Serial.println(" MQTT connecting problem in Loop during subscribing");
-                    Serial.println(checkstatus);
                 #endif
             }
             if (manageSubscriptions(true)) { //just all subscriptions worked
@@ -388,12 +383,10 @@ int8_t SyncMQTTConnectionESP32::loop(uint32_t millistime, uint8_t lANStatus) {
             }
         }
         else if (_MQTTStatus == 4) {//subscribed and connected
-            bool checkstatus = _mqttPubSubClient.loop();
-            if (!checkstatus) {
+            if (!_mqttPubSubClient.loop()) {
                 _MQTTStatus = -2; // MQTT just disconnected
                 #ifdef DEBUG_MQTT_ENABLED 
                     Serial.print(" MQTT connecting problem in during normal LOOP ");
-                    Serial.println(checkstatus);
                 #endif
             }
             if (!manageSubscriptions()) { //problem with subscribing or unsubscribing of changed requests in the buffer
