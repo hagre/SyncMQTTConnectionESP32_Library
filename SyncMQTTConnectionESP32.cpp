@@ -29,9 +29,9 @@ SyncMQTTConnectionESP32::SyncMQTTConnectionESP32() {
     _withPW = false;
     _withLastWill = false;
 
-#ifdef DEBUG_MQTT_ENABLED
-    Serial.begin(DEBUG_MQTT_BOUD); //Debug output, usually USB Port;
-#endif
+    #ifdef DEBUG_MQTT_ENABLED
+        Serial.begin(DEBUG_MQTT_BOUD); //Debug output, usually USB Port;
+    #endif
 }
 
 
@@ -151,7 +151,7 @@ bool SyncMQTTConnectionESP32::checkSubscriptionActive(uint8_t num) {
     return  _subscriptionBuffer[num].subscribed;
 }
 
-bool SyncMQTTConnectionESP32::addSubscriptionToTable(uint8_t num, byte* topic, uint16_t topicLength) {
+bool SyncMQTTConnectionESP32::addSubscriptionToTable(uint8_t num, const char* topic, uint16_t topicLength) {
 
     if (num <= MAX_NUM_OFF_MQTT_SUBSCRIPTION) { //in range
         if (!checkSubscriptionUsed(num)) { //new subscription
@@ -251,9 +251,9 @@ bool SyncMQTTConnectionESP32::manageSubscriptions(bool justSubscribe = false) {
 }
 
 
-bool SyncMQTTConnectionESP32::publish(const char* topic, const uint8_t* payload, unsigned int plength, bool retain) {
+bool SyncMQTTConnectionESP32::publish(const char* topic, const char* payload, bool retain) {
 
-    return _mqttPubSubClient.publish(topic, payload, plength, retain);
+    return _mqttPubSubClient.publish(topic, payload, retain);
 }
 
 /*
@@ -269,75 +269,75 @@ int8_t SyncMQTTConnectionESP32::loop(uint32_t millistime, uint8_t lANStatus) {
     if (lANStatus == -2) { // LAN is just disconnected 
         if (_MQTTStatus > -2) { // MQTT better than disconnected and LAN just disconnected 
             _MQTTStatus = -3;
-#ifdef DEBUG_MQTT_ENABLED 
-            Serial.println(" LAN for MQTT just disconnected"); //disconnect -> MQTT stop ");
-#endif
+            #ifdef DEBUG_MQTT_ENABLED 
+                Serial.println(" LAN for MQTT just disconnected"); //disconnect -> MQTT stop ");
+            #endif
         }
     }
     else if (lANStatus == 3) { // LAN is connected look for more
         if (_MQTTStatus == -5) { // MQTT init
             _MQTTStatus = 0; //MQTT disconnected 
-#ifdef DEBUG_MQTT_ENABLED 
-            Serial.println(" MQTT init loop");
-#endif
+            #ifdef DEBUG_MQTT_ENABLED 
+                Serial.println(" MQTT init loop");
+            #endif
         }
         else if (_MQTTStatus == -3) { // LAN just disconnected
             _mqttPubSubClient.disconnect();
             setAllUnsubscribed();
             _MQTTStatus = -2; //MQTT just disconnected
-#ifdef DEBUG_MQTT_ENABLED 
-            Serial.println(" MQTT stop - LAN connection lost");
-#endif
+            #ifdef DEBUG_MQTT_ENABLED 
+                Serial.println(" MQTT stop - LAN connection lost");
+            #endif
         }
         else if (_MQTTStatus == -2) { // MQTT just disconnected
             _MQTTWaitForReconnectionTimer.resetTimingNow(millistime);
             _MQTTStatus = -1; //MQTT wait to reconnect
-#ifdef DEBUG_MQTT_ENABLED 
-            Serial.println(" MQTT just disconnected");
-#endif
+            #ifdef DEBUG_MQTT_ENABLED 
+                Serial.println(" MQTT just disconnected");
+            #endif
         }
         else if (_MQTTStatus == -1) { //MQTT wait to reconnect
             if (_MQTTWaitForReconnectionTimer.getStatus(millistime) >= 0) {
                 _MQTTStatus = 0; //MQTT disconncted
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" MQTT time to reconnect ");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.println(" MQTT time to reconnect ");
+                #endif
             }
         }
         else if (_MQTTStatus == 0) { //MQTT disconnected 
             _MQTTWaitForConnectionTimer.resetTimingNow(millistime);
             if (_withPW) {
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.print(" Connecting MQTT with PW");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.print(" Connecting MQTT with PW");
+                #endif
                 if (_withLastWill) {
                     _mqttPubSubClient.connect(_mqttPubSubClientId, _mqttUsername, _mqttPassword, _mQTTLastWillTopic, _mQTTLastWillQos, _mQTTLastWillRetain, _mQTTLastWillMessage, _cleanSessionClient);
-#ifdef DEBUG_MQTT_ENABLED 
-                    Serial.println(" and with LastWill");
-#endif
+                    #ifdef DEBUG_MQTT_ENABLED 
+                        Serial.println(" and with LastWill");
+                    #endif
                 }
                 else {
                     _mqttPubSubClient.connect(_mqttPubSubClientId, _mqttUsername, _mqttPassword);
-#ifdef DEBUG_MQTT_ENABLED 
-                    Serial.println(" and without LastWill");
-#endif
+                    #ifdef DEBUG_MQTT_ENABLED 
+                        Serial.println(" and without LastWill");
+                    #endif
                 }
             }
             else {
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.print(" Connecting MQTT without PW");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.print(" Connecting MQTT without PW");
+                #endif
                 if (_withLastWill) {
                     _mqttPubSubClient.connect(_mqttPubSubClientId, _mQTTLastWillTopic, _mQTTLastWillQos, _mQTTLastWillRetain, _mQTTLastWillMessage);
-#ifdef DEBUG_MQTT_ENABLED 
-                    Serial.println(" and with LastWill");
-#endif
+                    #ifdef DEBUG_MQTT_ENABLED 
+                        Serial.println(" and with LastWill");
+                    #endif
                 }
                 else {
                     _mqttPubSubClient.connect(_mqttPubSubClientId);
-#ifdef DEBUG_MQTT_ENABLED 
-                    Serial.println(" and without LastWill");
-#endif
+                    #ifdef DEBUG_MQTT_ENABLED 
+                        Serial.println(" and without LastWill");
+                    #endif
                 }
             }
             _MQTTStatus = 1; //MQTT connecting
@@ -346,9 +346,9 @@ int8_t SyncMQTTConnectionESP32::loop(uint32_t millistime, uint8_t lANStatus) {
             if (_mqttPubSubClient.connected()) {
                 _MQTTStatus = 2; //MQTT just connected
                 //boot/new connect = true; ----------------------------------------------------------------------------------------------------BOOT MSG BUFFER ----------------------------------------------------------------------------------
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" MQTT just connected");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.println(" MQTT just connected");
+                #endif
             }
             else if (_MQTTWaitForConnectionTimer.getStatus(millistime) >= 0) {
                 _MQTTStatus = -2; // MQTT just disconnected
@@ -356,50 +356,56 @@ int8_t SyncMQTTConnectionESP32::loop(uint32_t millistime, uint8_t lANStatus) {
         }
         else if (_MQTTStatus == 2) { //MQTT just connected
             _MQTTStatus = 3; //subscribing
+            bool checkstatus = _mqttPubSubClient.loop();
             if (!_mqttPubSubClient.loop()) {
                 _MQTTStatus = -2; // MQTT just disconnected
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" MQTT connecting problem in Loop");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.print(" MQTT connecting problem in Loop ");
+                    Serial.println(checkstatus);
+                #endif
             }
         }
         else if (_MQTTStatus == 3) { //subscribing
-            if (!_mqttPubSubClient.loop()) {
+            bool checkstatus = _mqttPubSubClient.loop();
+            if (!checkstatus) {
                 _MQTTStatus = -2; // MQTT just disconnected
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" MQTT connecting problem in Loop during subscribing");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.println(" MQTT connecting problem in Loop during subscribing");
+                    Serial.println(checkstatus);
+                #endif
             }
             if (manageSubscriptions(true)) { //just all subscriptions worked
                 _MQTTStatus = 4; //subscribed and connected
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" Subscribed to all topics ");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.println(" Subscribed to all topics ");
+                #endif
             }
             else {
                 _MQTTStatus = -3; //Subscription did not work, so goto LAN just disconnected
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" Subscription did not work ");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.println(" Subscription did not work ");
+                #endif
             }
         }
         else if (_MQTTStatus == 4) {//subscribed and connected
-            if (!_mqttPubSubClient.loop()) {
+            bool checkstatus = _mqttPubSubClient.loop();
+            if (!checkstatus) {
                 _MQTTStatus = -2; // MQTT just disconnected
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" MQTT connecting problem in during normal LOOP");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.print(" MQTT connecting problem in during normal LOOP ");
+                    Serial.println(checkstatus);
+                #endif
             }
             if (!manageSubscriptions()) { //problem with subscribing or unsubscribing of changed requests in the buffer
                 _MQTTStatus = -3; //Sub- and Unsub-scription did not work, so goto LAN just disconnected
-#ifdef DEBUG_MQTT_ENABLED 
-                Serial.println(" Sub- and Unsub-scription did not work ");
-#endif
+                #ifdef DEBUG_MQTT_ENABLED 
+                    Serial.println(" Sub- and Unsub-scription did not work ");
+                #endif
             }
 
-#ifdef DEBUG_MQTT_ENABLED 
+        #ifdef DEBUG_MQTT_ENABLED 
             //Serial.println ("MQTT Loop duty ");
-#endif 
+        #endif 
         }
     }
 

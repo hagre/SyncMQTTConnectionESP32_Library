@@ -21,33 +21,33 @@ by hagre 2020
 #include "verysimpletimer.h" 
 
 #ifndef MQTT_WAIT_FOR_SERVER_CONNECTION
-#define MQTT_WAIT_FOR_SERVER_CONNECTION 30000 //ms time
+    #define MQTT_WAIT_FOR_SERVER_CONNECTION 30000 //ms time
 #endif
 #ifndef MQTT_WAIT_FOR_SERVER_RECONNECTION
-#define MQTT_WAIT_FOR_SERVER_RECONNECTION 15000 //ms time
+    #define MQTT_WAIT_FOR_SERVER_RECONNECTION 15000 //ms time
 #endif
 
 //switch ASAP off
-#define DEBUG_MQTT_ENABLED 
+//#define DEBUG_MQTT_ENABLED 
 
 #ifdef DEBUG_MQTT_ENABLED
-#define DEBUG_MQTT_BOUD 230400 //config as required
+    #define DEBUG_MQTT_BOUD 230400 //config as required
 #endif
 
 #ifndef MAX_NUM_OFF_MQTT_SUBSCRIPTION
-#define MAX_NUM_OFF_MQTT_SUBSCRIPTION 10 //config as required
+    #define MAX_NUM_OFF_MQTT_SUBSCRIPTION 20 //config as required
 #endif
 
 #ifndef MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH
-#define MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH 50 //config as required
+#define MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH 100 //config as required
 #endif
 
 
 #if defined(ESP8266) || defined(ESP32)
-#include <functional>
-#define MY_MQTT_CALLBACK_SIGNATURE std::function<void(char*, uint8_t*, unsigned int)> mycallback
+    #include <functional>
+    #define MY_MQTT_CALLBACK_SIGNATURE std::function<void(char*, uint8_t*, unsigned int)> mycallback
 #else
-#define MY_MQTT_CALLBACK_SIGNATURE void (*mycallback)(char*, uint8_t*, unsigned int)
+    #define MY_MQTT_CALLBACK_SIGNATURE void (*mycallback)(char*, uint8_t*, unsigned int)
 #endif
 
 
@@ -102,11 +102,11 @@ public:
     void deleteMQTTLastWill();
 
     bool checkSubscriptionUsed(uint8_t num);
-    bool addSubscriptionToTable(uint8_t num, byte* topic, uint16_t topicLength);
+    bool addSubscriptionToTable(uint8_t num, const char* topic, uint16_t topicLength);
     bool deleteSubscriptioFromTable(uint8_t num);
     char* getTopicFromBuffer(uint8_t num);
 
-    bool publish(const char* topic, const uint8_t* payload, unsigned int plength, bool retain);
+    bool publish(const char* topic, const char* payload, bool retain);
     // bool publish (const char* topic, const uint8_t * payload, unsigned int plength, uint8_t qOS, bool retain); //not supported by PubSubCLient
     int8_t loop(uint32_t millistime, uint8_t lANStatus);
 };
