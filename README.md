@@ -2,7 +2,7 @@
 
 Arduino Library for very simple and basic MQTT connection, SYNCHRONOUS, arduino-esp32, based on PubSubClient
 
-require #include "PubSubClient.h" library https://github.com/knolleary/pubsubclient.git PlatforIO ID_89
+require #include "PubSubClient.h" library https://github.com/knolleary/pubsubclient.git PlatformIO ID_89
 
 require #include "verysimpletimer.h"  https://github.com/hagre/VerySimpleTimer_Library.git
 
@@ -31,6 +31,8 @@ require #include "verysimpletimer.h"  https://github.com/hagre/VerySimpleTimer_L
 # public Methods:
 
     SyncMQTTConnectionESP32();
+    
+    void setMQTTDebugSerial (HardwareSerial* mqttDebugSerial);
 
     void setMQTTConnection (const char *mqttPubSubClientId, const char *mqttUsername, const char *mqttPassword,  bool cleanSessionClient, Client& mqttLANClient, IPAddress ip, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout );
 
