@@ -28,18 +28,16 @@ by hagre 2020
 #endif
 
 //switch ASAP off
-//#define DEBUG_MQTT_ENABLED 
+//#define DEBUG_MY_MQTT_ENABLED 
 
-#ifdef DEBUG_MQTT_ENABLED
-    #define DEBUG_MQTT_BOUD 230400 //config as required
-#endif
+#include <HardwareSerial.h>
 
 #ifndef MAX_NUM_OFF_MQTT_SUBSCRIPTION
     #define MAX_NUM_OFF_MQTT_SUBSCRIPTION 20 //config as required
 #endif
 
 #ifndef MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH
-#define MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH 100 //config as required
+    #define MAX_MQTT_SUBSCRIPTION_TOPIC_LENGTH 100 //config as required
 #endif
 
 
@@ -55,6 +53,7 @@ by hagre 2020
 class SyncMQTTConnectionESP32
 {
 private:
+    HardwareSerial* _mqttDebugSerial;
     int8_t _MQTTStatus;
 
     struct SubscriptionBuffer_t {
@@ -91,6 +90,8 @@ private:
 
 public:
     SyncMQTTConnectionESP32();
+
+    void setMQTTDebugSerial (HardwareSerial* mqttDebugSerial);
 
     void setMQTTConnection(const char* mqttPubSubClientId, const char* mqttUsername, const char* mqttPassword, bool cleanSessionClient, Client& mqttLANClient, IPAddress ip, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout);
     void setMQTTConnection(const char* mqttPubSubClientId, const char* mqttUsername, const char* mqttPassword, bool cleanSessionClient, Client& mqttLANClient, const char* domain, uint16_t port, uint16_t mQTTMaxPacketSize, uint16_t mQTTKeepAlive, uint16_t socketTimeout);
