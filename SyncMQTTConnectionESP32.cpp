@@ -257,6 +257,11 @@ bool SyncMQTTConnectionESP32::manageSubscriptions(bool justSubscribe = false) {
 }
 
 
+bool SyncMQTTConnectionESP32::publish(const char* topic, const uint8_t * payload, unsigned int plength, boolean retain) {
+
+    return _mqttPubSubClient.publish(topic, payload, plength, retain);
+}
+
 bool SyncMQTTConnectionESP32::publish(const char* topic, const char* payload, bool retain) {
 
     return _mqttPubSubClient.publish(topic, payload, retain);
@@ -346,7 +351,8 @@ int8_t SyncMQTTConnectionESP32::loop(uint32_t millistime, uint8_t lANStatus) {
                     #endif
                 }
             }
-            _MQTTStatus = 1; //MQTT connecting            
+            _MQTTStatus = 1; //MQTT connecting
+            
         }
         else if (_MQTTStatus == 1) {//MQTT connecting
             #ifdef DEBUG_MY_MQTT_ENABLED 

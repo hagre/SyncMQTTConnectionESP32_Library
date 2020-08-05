@@ -107,6 +107,7 @@ public:
     bool deleteSubscriptioFromTable(uint8_t num);
     char* getTopicFromBuffer(uint8_t num);
 
+    bool publish(const char* topic, const uint8_t * payload, unsigned int plength, boolean retain);
     bool publish(const char* topic, const char* payload, bool retain);
     // bool publish (const char* topic, const uint8_t * payload, unsigned int plength, uint8_t qOS, bool retain); //not supported by PubSubCLient
     int8_t loop(uint32_t millistime, uint8_t lANStatus);
